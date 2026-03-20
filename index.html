@@ -10,25 +10,42 @@
 <style>
 :root{--blue:#0db8e8;--dark:#0a3d50;--mid:#1a5f75;--glass:rgba(255,255,255,0.18);--glass2:rgba(255,255,255,0.28);--r:28px;--left:500px;}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html {overflow-y: scroll;}
+html{overflow-y:scroll;}
 body{font-family:'Baloo 2',cursive;background:#a8ecf7;overflow-x:hidden;}
 .bg-img{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;}
+
+/* NAV — desktop unchanged */
 nav{background:rgba(255,255,255,0.45);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.5);padding:0 2.5rem;position:sticky;top:0;z-index:200;}
 nav ul{list-style:none;display:flex;justify-content:center;gap:.5rem;}
 nav a{display:block;padding:1.3rem 1.1rem;text-decoration:none;font-size:.95rem;font-weight:700;letter-spacing:.12em;color:var(--mid);transition:color .25s,border-color .25s;border-bottom:2px solid transparent;}
 nav a:hover,nav a.active{color:var(--dark);border-color:var(--blue);}
+
+.nav-title{display:none;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--dark);letter-spacing:.1em;}
+/* Hamburger — hidden on desktop */
+.hamburger{display:none;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;padding:.8rem;z-index:300;background:none;border:none;}
+.hamburger span{display:block;width:26px;height:3px;background:var(--dark);border-radius:3px;transition:transform .3s,opacity .3s;}
+.hamburger.open span:nth-child(1){transform:translateY(8px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
+
+/* Mobile drawer — hidden on desktop */
+.mobile-menu{display:none;}
+
+/* LEFT PANEL */
 .left-panel{position:fixed;left:0;top:68px;bottom:0;width:var(--left);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;gap:1.6rem;}
 .left-panel::after{content:'';position:absolute;right:0;top:10%;bottom:10%;width:1px;background:rgba(255,255,255,.3);}
 .profile-circle{width:280px;height:280px;border-radius:50%;overflow:hidden;border:6px solid rgba(255,255,255,.85);box-shadow:0 10px 50px rgba(0,0,0,.22),0 0 0 5px rgba(13,184,232,.3);transition:transform .3s;flex-shrink:0;}
 .profile-circle:hover{transform:scale(1.06);}
 .profile-circle img{width:100%;height:100%;object-fit:cover;}
-.name-top{font-family:'Bebas Neue',sans-serif;font-size:7rem;color:#fff;letter-spacing:.05em;line-height:0.5;text-shadow:3px 3px 14px rgba(0,0,0,.15);cursor:pointer;transition:color .25s;text-align:center;margin-top: 4%;}
+.name-top{font-family:'Bebas Neue',sans-serif;font-size:7rem;color:#fff;letter-spacing:.05em;line-height:0.5;text-shadow:3px 3px 14px rgba(0,0,0,.15);cursor:pointer;transition:color .25s;text-align:center;margin-top:4%;}
 .name-top:hover{color:var(--blue);}
 .name-bot{font-family:'Baloo 2',cursive;font-weight:800;font-size:6rem;color:var(--dark);line-height:1;cursor:pointer;transition:color .25s;text-align:center;}
 .name-bot:hover{color:var(--blue);}
 .glt{font-size:1.1rem;color:var(--dark);letter-spacing:.04em;min-height:1.4em;font-weight:600;margin-top:.3rem;max-width:380px;line-height:1.5;text-align:center;}
 @keyframes glitch{0%{clip-path:inset(0 0 100% 0);transform:translate(0);}25%{clip-path:inset(20% 0 50% 0);transform:translate(-3px,1px);color:var(--blue);}50%{clip-path:inset(50% 0 20% 0);transform:translate(3px,-1px);}75%{clip-path:inset(80% 0 5% 0);transform:translate(-2px,2px);}100%{clip-path:inset(0 0 0% 0);transform:translate(0);color:var(--dark);}}
 .glt.glitching{animation:glitch .5s steps(1) forwards;}
+
+/* PAGE & CARDS */
 .page{position:relative;z-index:1;min-height:calc(100vh - 68px);display:flex;align-items:center;justify-content:flex-start;padding:2.5rem 3rem 2.5rem calc(var(--left) + 2.5rem);}
 .card{background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.45);border-radius:var(--r);padding:3.2rem 3.8rem;width:100%;max-width:calc(100vw - var(--left) - 5rem);}
 .card-line{display:block;width:240px;height:1.5px;background:rgba(255,255,255,0.6);margin-bottom:2rem;}
@@ -97,22 +114,92 @@ nav a:hover,nav a.active{color:var(--dark);border-color:var(--blue);}
 .ct-card a{font-size:.92rem;color:var(--blue);text-decoration:none;font-weight:600;}
 .ct-card a:hover{text-decoration:underline;}
 .placeholder{min-height:calc(100vh - 68px);padding-left:var(--left);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--mid);letter-spacing:.1em;position:relative;z-index:1;}
-@media(max-width:1024px){:root{--left:0px;}.left-panel{position:relative;top:0;width:100%;flex-direction:row;flex-wrap:wrap;padding:1rem;justify-content:center;gap:.8rem;}.left-panel::after{display:none;}.page{padding:1.5rem;}.proj-grid,.ct-cards,.port-grid{grid-template-columns:1fr;}}
+
+/* ── MOBILE ONLY ── */
+@media(max-width:1024px){
+  :root{--left:0px;}
+
+  /* Hide desktop nav links, show hamburger */
+  nav{display:flex;align-items:center;justify-content:space-between;padding:0 1.2rem;border-bottom:none;}
+  nav ul{display:none;}
+  .nav-title{display:block;}
+  .hamburger{display:flex;}
+
+  /* Mobile slide-down drawer */
+  .mobile-menu{display:block;position:fixed;top:58px;left:0;right:0;z-index:150;background:rgba(220,245,255,0.97);backdrop-filter:blur(16px);border:none;max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .mobile-menu.open{max-height:500px;}
+  body.menu-open{overflow:hidden;}
+  .mobile-menu a{display:block;padding:1rem 1.8rem;font-size:1rem;font-weight:700;letter-spacing:.12em;color:var(--mid);text-decoration:none;border-bottom:1px solid rgba(13,184,232,.1);transition:background .2s,color .2s;}
+  .mobile-menu a:hover,.mobile-menu a.active{background:rgba(13,184,232,.1);color:var(--dark);}
+
+  /* Left panel stacked on top */
+  .left-panel{position:relative;top:0;width:100%;flex-direction:column;align-items:center;padding:2rem 1rem 1.5rem;gap:1rem;}
+  .left-panel::after{display:none;}
+  .profile-circle{width:150px;height:150px; margin-bottom: 3%;}
+  .name-top{font-size:3.1rem;margin-top:0;line-height:0.5;}
+  .name-bot{font-size:2.7rem; margin-bottom: 0px; line-height: 1;}
+  .glt{font-size:.85rem;max-width:280px; margin-top: 0.1%;}
+
+  /* Pages full width */
+  .page{padding:1.5rem;min-height:auto;}
+  .card{max-width:100%;padding:1.5rem;}
+  .proj-grid,.ct-cards,.port-grid{grid-template-columns:1fr;}
+  .port-grid img{height:200px;}
+  .placeholder{padding-left:0;font-size:2.2rem;}
+}
 </style>
 </head>
 <body>
 <img class="bg-img" src="Background.png" alt="background">
-<nav><ul>
-  <li><a href="#!/">HOME</a></li><li><a href="#!/artist">3D ARTIST</a></li><li><a href="#!/developer">DEVELOPER</a></li><li><a href="#!/projects">PROJECTS</a></li><li><a href="#!/studies">STUDIES</a></li><li><a href="#!/hobbies">SIDE HOBBIES</a></li><li><a href="#!/contact">CONTACT</a></li>
-</ul></nav>
+
+<nav>
+  <span class="nav-title">ANIKET PARMAR</span>
+  <button class="hamburger" id="hbtn" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul>
+    <li><a href="#!/">HOME</a></li>
+    <li><a href="#!/artist">3D ARTIST</a></li>
+    <li><a href="#!/developer">DEVELOPER</a></li>
+    <li><a href="#!/projects">PROJECTS</a></li>
+    <li><a href="#!/studies">STUDIES</a></li>
+    <li><a href="#!/hobbies">SIDE HOBBIES</a></li>
+    <li><a href="#!/contact">CONTACT</a></li>
+  </ul>
+</nav>
+
+<!-- Mobile dropdown menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#!/" onclick="closeMenu()">HOME</a>
+  <a href="#!/artist" onclick="closeMenu()">3D ARTIST</a>
+  <a href="#!/developer" onclick="closeMenu()">DEVELOPER</a>
+  <a href="#!/projects" onclick="closeMenu()">PROJECTS</a>
+  <a href="#!/studies" onclick="closeMenu()">STUDIES</a>
+  <a href="#!/hobbies" onclick="closeMenu()">SIDE HOBBIES</a>
+  <a href="#!/contact" onclick="closeMenu()">CONTACT</a>
+</div>
+
 <div class="left-panel" ng-controller="HomeCtrl">
   <div class="profile-circle"><img src="profile.jpeg" alt="Aniket Parmar"></div>
   <h1 class="name-top">ANIKET</h1>
   <h1 class="name-bot">Parmar</h1>
   <p class="glt" id="glt">{{currentText}}</p>
 </div>
+
 <div ng-view></div>
+
 <script>
+function toggleMenu(){
+  document.getElementById('mobileMenu').classList.toggle('open');
+  document.getElementById('hbtn').classList.toggle('open');
+  document.body.classList.toggle('menu-open');
+}
+function closeMenu(){
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hbtn').classList.remove('open');
+  document.body.classList.remove('menu-open');
+}
+
 var T={};
 T.home=`<div class="page"><div class="card"><span class="card-line"></span><div class="about-hdr"><div class="alogo"><img src="Ketcies.jpeg" alt="Ketcies3D"></div><div><span class="title-solid">About </span><span class="title-outline">Me</span></div></div><p class="para">Hello, I'm Aniket, a creative technologist working at the intersection of 3D art, Love Python Programming, and a wanna be AI engineer. I enjoy building visual experiences, experimenting with new technologies, and turning complex ideas into creative digital projects.</p><div class="icon-row"><div class="ibox"><img src="blender-svgrepo-com.svg" alt="Blender"></div><div class="ibox"><img src="python-svgrepo-com.svg" alt="Python"></div><div class="ibox"><img src="ai-svgrepo-com.svg" alt="AI"></div><div class="ibox"><img src="idea-svgrepo-com.svg" alt="Ideas"></div></div></div></div>`;
 T.about=T.home;
@@ -122,10 +209,11 @@ T.projects=`<div class="page"><div class="card"><span class="card-line"></span><
 T.studies=`<div class="page"><div class="card"><span class="card-line"></span><p class="label">STUDIES</p><h2 class="title-pf" style="margin-bottom:1.5rem;">Studies</h2><div class="edu"><div class="edu-hdr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><h3>Higher Secondary Education</h3></div><p>Board : Gujarat Secondary &amp; Higher Secondary Education Board<br>Stream : Physics • Chemistry • Mathematics</p></div><div class="edu"><div class="edu-hdr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><h3>Bachelor of Engineering</h3></div><p>University : Gujarat Technological University<br>College : SAL Engineering &amp; Technical Institute<br>Branch : Information Technology<br>Current Semester : 6<br>Graduation Year : 2027</p></div></div></div>`;
 T.contact=`<div class="page"><div class="card"><span class="card-line"></span><div class="ct-top"><div><p class="label">CONTACT</p><h2 class="title-pf">Get In Touch</h2></div><div class="ct-icon">!</div></div><p class="para">If you would like to collaborate, discuss projects, or simply connect, feel free to reach out through the emails below.</p><div class="ct-cards"><div class="ct-card"><h4>Professional Contact</h4><a href="mailto:ketcies3d336@gmail.com">ketcies3d336@gmail.com</a></div><div class="ct-card"><h4>General / Coding Contact</h4><a href="mailto:aniket336parmar@gmail.com">aniket336parmar@gmail.com</a></div></div></div></div>`;
 T.hobbies=`<div class="placeholder">SIDE HOBBIES — Coming Soon</div>`;
+
 angular.module('portfolio',['ngRoute'])
 .config(function($routeProvider){$routeProvider.when('/',{template:T.home}).when('/artist',{template:T.artist}).when('/developer',{template:T.developer}).when('/projects',{template:T.projects}).when('/studies',{template:T.studies}).when('/hobbies',{template:T.hobbies}).when('/contact',{template:T.contact}).otherwise({redirectTo:'/'});})
 .controller('HomeCtrl',function($scope,$interval){var lines=['3D Artist crafting digital worlds','Python enthusiast building smart tools','Aspiring AI & Machine Learning engineer','Creative technologist exploring innovation'];var i=0;$scope.currentText=lines[0];$interval(function(){i=(i+1)%lines.length;var el=document.getElementById('glt');if(!el)return;el.classList.add('glitching');setTimeout(function(){$scope.$apply(function(){$scope.currentText=lines[i];});el.classList.remove('glitching');},500);},3000);})
-.run(function($rootScope,$location){$rootScope.$on('$routeChangeSuccess',function(){var p='#!/'+($location.path().slice(1)||'');document.querySelectorAll('nav a').forEach(function(a){a.classList.toggle('active',a.getAttribute('href')===p);});});});
+.run(function($rootScope,$location){$rootScope.$on('$routeChangeSuccess',function(){var p='#!/'+($location.path().slice(1)||'');document.querySelectorAll('nav a, .mobile-menu a').forEach(function(a){a.classList.toggle('active',a.getAttribute('href')===p);});closeMenu();});});
 </script>
 </body>
 </html>
