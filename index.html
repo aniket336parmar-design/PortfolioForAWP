@@ -10,6 +10,7 @@
 <style>
 :root{--blue:#0db8e8;--dark:#0a3d50;--mid:#1a5f75;--glass:rgba(255,255,255,0.18);--glass2:rgba(255,255,255,0.28);--r:28px;--left:500px;}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html {overflow-y: scroll;}
 body{font-family:'Baloo 2',cursive;background:#a8ecf7;overflow-x:hidden;}
 .bg-img{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;}
 nav{background:rgba(255,255,255,0.45);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.5);padding:0 2.5rem;position:sticky;top:0;z-index:200;}
@@ -21,11 +22,11 @@ nav a:hover,nav a.active{color:var(--dark);border-color:var(--blue);}
 .profile-circle{width:280px;height:280px;border-radius:50%;overflow:hidden;border:6px solid rgba(255,255,255,.85);box-shadow:0 10px 50px rgba(0,0,0,.22),0 0 0 5px rgba(13,184,232,.3);transition:transform .3s;flex-shrink:0;}
 .profile-circle:hover{transform:scale(1.06);}
 .profile-circle img{width:100%;height:100%;object-fit:cover;}
-.name-top{font-family:'Bebas Neue',sans-serif;font-size:7rem;color:#fff;letter-spacing:.05em;line-height:1;text-shadow:3px 3px 14px rgba(0,0,0,.15);cursor:pointer;transition:color .25s;text-align:center;}
+.name-top{font-family:'Bebas Neue',sans-serif;font-size:7rem;color:#fff;letter-spacing:.05em;line-height:0.5;text-shadow:3px 3px 14px rgba(0,0,0,.15);cursor:pointer;transition:color .25s;text-align:center;margin-top: 4%;}
 .name-top:hover{color:var(--blue);}
 .name-bot{font-family:'Baloo 2',cursive;font-weight:800;font-size:6rem;color:var(--dark);line-height:1;cursor:pointer;transition:color .25s;text-align:center;}
 .name-bot:hover{color:var(--blue);}
-.glt{font-size:1.3rem;color:var(--dark);letter-spacing:.04em;min-height:1.4em;font-weight:600;margin-top:.3rem;max-width:380px;line-height:1.5;text-align:center;}
+.glt{font-size:1.1rem;color:var(--dark);letter-spacing:.04em;min-height:1.4em;font-weight:600;margin-top:.3rem;max-width:380px;line-height:1.5;text-align:center;}
 @keyframes glitch{0%{clip-path:inset(0 0 100% 0);transform:translate(0);}25%{clip-path:inset(20% 0 50% 0);transform:translate(-3px,1px);color:var(--blue);}50%{clip-path:inset(50% 0 20% 0);transform:translate(3px,-1px);}75%{clip-path:inset(80% 0 5% 0);transform:translate(-2px,2px);}100%{clip-path:inset(0 0 0% 0);transform:translate(0);color:var(--dark);}}
 .glt.glitching{animation:glitch .5s steps(1) forwards;}
 .page{position:relative;z-index:1;min-height:calc(100vh - 68px);display:flex;align-items:center;justify-content:flex-start;padding:2.5rem 3rem 2.5rem calc(var(--left) + 2.5rem);}
