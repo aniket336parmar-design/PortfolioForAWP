@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="portfolio">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aniket Parmar</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular-route.min.js"></script>
+<style>
+:root{--blue:#0db8e8;--dark:#0a3d50;--mid:#1a5f75;--glass:rgba(255,255,255,0.18);--glass2:rgba(255,255,255,0.28);--r:28px;--left:500px;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Baloo 2',cursive;background:#a8ecf7;overflow-x:hidden;}
+.bg-img{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;}
+nav{background:rgba(255,255,255,0.45);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.5);padding:0 2.5rem;position:sticky;top:0;z-index:200;}
+nav ul{list-style:none;display:flex;justify-content:center;gap:.5rem;}
+nav a{display:block;padding:1.3rem 1.1rem;text-decoration:none;font-size:.95rem;font-weight:700;letter-spacing:.12em;color:var(--mid);transition:color .25s,border-color .25s;border-bottom:2px solid transparent;}
+nav a:hover,nav a.active{color:var(--dark);border-color:var(--blue);}
+.left-panel{position:fixed;left:0;top:68px;bottom:0;width:var(--left);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;gap:1.6rem;}
+.left-panel::after{content:'';position:absolute;right:0;top:10%;bottom:10%;width:1px;background:rgba(255,255,255,.3);}
+.profile-circle{width:280px;height:280px;border-radius:50%;overflow:hidden;border:6px solid rgba(255,255,255,.85);box-shadow:0 10px 50px rgba(0,0,0,.22),0 0 0 5px rgba(13,184,232,.3);transition:transform .3s;flex-shrink:0;}
+.profile-circle:hover{transform:scale(1.06);}
+.profile-circle img{width:100%;height:100%;object-fit:cover;}
+.name-top{font-family:'Bebas Neue',sans-serif;font-size:7rem;color:#fff;letter-spacing:.05em;line-height:1;text-shadow:3px 3px 14px rgba(0,0,0,.15);cursor:pointer;transition:color .25s;text-align:center;}
+.name-top:hover{color:var(--blue);}
+.name-bot{font-family:'Baloo 2',cursive;font-weight:800;font-size:6rem;color:var(--dark);line-height:1;cursor:pointer;transition:color .25s;text-align:center;}
+.name-bot:hover{color:var(--blue);}
+.glt{font-size:1.3rem;color:var(--dark);letter-spacing:.04em;min-height:1.4em;font-weight:600;margin-top:.3rem;max-width:380px;line-height:1.5;text-align:center;}
+@keyframes glitch{0%{clip-path:inset(0 0 100% 0);transform:translate(0);}25%{clip-path:inset(20% 0 50% 0);transform:translate(-3px,1px);color:var(--blue);}50%{clip-path:inset(50% 0 20% 0);transform:translate(3px,-1px);}75%{clip-path:inset(80% 0 5% 0);transform:translate(-2px,2px);}100%{clip-path:inset(0 0 0% 0);transform:translate(0);color:var(--dark);}}
+.glt.glitching{animation:glitch .5s steps(1) forwards;}
+.page{position:relative;z-index:1;min-height:calc(100vh - 68px);display:flex;align-items:center;justify-content:flex-start;padding:2.5rem 3rem 2.5rem calc(var(--left) + 2.5rem);}
+.card{background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.45);border-radius:var(--r);padding:3.2rem 3.8rem;width:100%;max-width:calc(100vw - var(--left) - 5rem);}
+.card-line{display:block;width:240px;height:1.5px;background:rgba(255,255,255,0.6);margin-bottom:2rem;}
+.label{font-size:.95rem;letter-spacing:.2em;color:var(--blue);margin-bottom:.4rem;font-weight:700;}
+.inner{background:var(--glass2);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.55);border-radius:calc(var(--r) - 6px);padding:2rem 2.4rem;margin:1.1rem 0;transition:transform .25s,box-shadow .25s,background .25s;}
+.inner:hover{transform:translateY(-4px) scale(1.01);box-shadow:0 10px 30px rgba(0,0,0,.1);background:rgba(255,255,255,.38);}
+.title-solid{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,5vw,6rem);color:var(--dark);line-height:1;}
+.title-outline{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.5rem,5vw,6rem);-webkit-text-stroke:2px var(--blue);color:transparent;line-height:1;}
+.title-pf{font-family:'Baloo 2',cursive;font-size:clamp(2.8rem,4vw,4.5rem);font-weight:800;color:var(--dark);}
+.para{font-size:1.1rem;line-height:1.8;color:#0b3545;margin:1rem 0 1.4rem;font-weight:500;}
+.tags{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.1rem;}
+.tag{font-size:.78rem;letter-spacing:.1em;border:1.5px solid rgba(13,184,232,.5);border-radius:20px;padding:.38rem 1rem;color:var(--dark);display:flex;align-items:center;gap:.45rem;transition:background .2s;font-weight:600;}
+.tag:hover{background:rgba(13,184,232,.15);}
+.tag img{width:22px;height:15px;object-fit:cover;border-radius:2px;}
+.about-hdr{display:flex;align-items:center;gap:1.6rem;margin-bottom:1rem;}
+.alogo{width:100px;height:100px;border-radius:18px;overflow:hidden;transition:transform .3s;}
+.alogo:hover{transform:rotate(6deg) scale(1.08);}
+.alogo img,.alogo2 img,.co-icon img{width:100%;height:100%;object-fit:cover;}
+.icon-row{display:flex;gap:1rem;margin-top:1.3rem;}
+.ibox{width:78px;height:78px;background:rgba(255,255,255,.55);border:1.5px solid rgba(255,255,255,.7);border-radius:16px;display:flex;align-items:center;justify-content:center;transition:transform .25s,box-shadow .25s;cursor:default;}
+.ibox:hover{transform:scale(1.12);box-shadow:0 5px 18px rgba(13,184,232,.3);}
+.ibox img{width:42px;height:42px;object-fit:contain;}
+.art-hdr{display:flex;align-items:center;gap:1.5rem;margin-bottom:.8rem;}
+.alogo2{width:90px;height:90px;border-radius:18px;overflow:hidden;transition:transform .3s;}
+.alogo2:hover{transform:scale(1.08);}
+.co-hdr{display:flex;align-items:center;gap:1.2rem;margin-bottom:.8rem;}
+.co-icon{width:62px;height:62px;border-radius:14px;overflow:hidden;flex-shrink:0;transition:transform .25s;}
+.co-icon:hover{transform:scale(1.08);}
+.co-type{font-size:.82rem;letter-spacing:.14em;color:var(--blue);font-weight:700;}
+.sec-lbl,.port-lbl{font-size:.85rem;letter-spacing:.18em;color:var(--blue);margin:1.8rem 0 .9rem;font-weight:800;}
+.email-row{display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:1.1rem;}
+.email-row img{width:32px;height:32px;transition:transform .25s;}
+.email-row img:hover{transform:scale(1.2);}
+.email-row a{font-size:1rem;color:var(--blue);text-decoration:none;font-weight:600;}
+.email-row a:hover{text-decoration:underline;}
+.port-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;}
+.port-grid img{width:100%;height:330px;object-fit:cover;border-radius:16px;transition:transform .3s,box-shadow .3s;}
+.port-grid img:hover{transform:scale(1.04);box-shadow:0 8px 26px rgba(0,0,0,.22);}
+.sk-group h4{font-size:1.1rem;font-weight:800;color:var(--dark);margin-bottom:1.2rem;display:flex;align-items:center;gap:.65rem;}
+.sk-group h4 img{width:30px;height:30px;flex-shrink:0;}
+.sk-row{margin-bottom:1rem;}
+.sk-row span{font-size:.98rem;color:#0b3545;display:block;margin-bottom:.4rem;font-weight:600;}
+.bar-t{background:rgba(255,255,255,.4);border-radius:20px;height:11px;overflow:hidden;}
+.bar-f{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--blue) 0%,#29c4f0 70%,rgba(41,196,240,0) 100%);}
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:1.4rem;}
+.proj-card{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.5);border-radius:calc(var(--r) - 6px);padding:1.9rem;transition:transform .25s,box-shadow .25s,background .25s;}
+.proj-card:hover{transform:translateY(-5px);box-shadow:0 10px 28px rgba(0,0,0,.12);background:rgba(255,255,255,.34);}
+.proj-hdr{display:flex;align-items:center;gap:.85rem;margin-bottom:.5rem;}
+.proj-icon{width:40px;height:40px;flex-shrink:0;}
+.proj-type{font-size:.78rem;letter-spacing:.14em;color:var(--blue);margin-bottom:.85rem;font-weight:700;}
+.proj-desc{font-size:.98rem;line-height:1.75;color:#0b3545;font-weight:500;}
+.proj-link{display:inline-block;margin-top:1.1rem;font-size:.9rem;color:var(--blue);text-decoration:none;font-weight:700;transition:opacity .2s;}
+.proj-link:hover{opacity:.7;}
+.edu{margin-bottom:2.1rem;}
+.edu-hdr{display:flex;align-items:center;gap:.85rem;margin-bottom:.8rem;}
+.edu-hdr svg{width:34px;height:34px;flex-shrink:0;color:var(--blue);}
+.edu h3{font-size:1.2rem;font-weight:800;color:var(--dark);}
+.edu p{font-size:1rem;line-height:1.9;color:#0b3545;font-weight:500;}
+.ct-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.ct-icon{width:90px;height:90px;border-radius:50%;border:3px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:var(--blue);transition:transform .3s;}
+.ct-icon:hover{transform:rotate(15deg) scale(1.12);}
+.ct-cards{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:1.5rem;}
+.ct-card{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.5);border-radius:calc(var(--r) - 6px);padding:1.6rem;text-align:center;transition:transform .25s,background .25s;}
+.ct-card:hover{transform:translateY(-3px);background:rgba(255,255,255,.34);}
+.ct-card h4{font-size:1rem;font-weight:800;color:var(--dark);margin-bottom:.6rem;}
+.ct-card a{font-size:.92rem;color:var(--blue);text-decoration:none;font-weight:600;}
+.ct-card a:hover{text-decoration:underline;}
+.placeholder{min-height:calc(100vh - 68px);padding-left:var(--left);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:4rem;color:var(--mid);letter-spacing:.1em;position:relative;z-index:1;}
+@media(max-width:1024px){:root{--left:0px;}.left-panel{position:relative;top:0;width:100%;flex-direction:row;flex-wrap:wrap;padding:1rem;justify-content:center;gap:.8rem;}.left-panel::after{display:none;}.page{padding:1.5rem;}.proj-grid,.ct-cards,.port-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<img class="bg-img" src="Background.png" alt="background">
+<nav><ul>
+  <li><a href="#!/">HOME</a></li><li><a href="#!/artist">3D ARTIST</a></li><li><a href="#!/developer">DEVELOPER</a></li><li><a href="#!/projects">PROJECTS</a></li><li><a href="#!/studies">STUDIES</a></li><li><a href="#!/hobbies">SIDE HOBBIES</a></li><li><a href="#!/contact">CONTACT</a></li>
+</ul></nav>
+<div class="left-panel" ng-controller="HomeCtrl">
+  <div class="profile-circle"><img src="profile.jpeg" alt="Aniket Parmar"></div>
+  <h1 class="name-top">ANIKET</h1>
+  <h1 class="name-bot">Parmar</h1>
+  <p class="glt" id="glt">{{currentText}}</p>
+</div>
+<div ng-view></div>
+<script>
+var T={};
+T.home=`<div class="page"><div class="card"><span class="card-line"></span><div class="about-hdr"><div class="alogo"><img src="ketcies.jpeg" alt="Ketcies3D"></div><div><span class="title-solid">About </span><span class="title-outline">Me</span></div></div><p class="para">Hello, I'm Aniket, a creative technologist working at the intersection of 3D art, Love Python Programming, and a wanna be AI engineer. I enjoy building visual experiences, experimenting with new technologies, and turning complex ideas into creative digital projects.</p><div class="icon-row"><div class="ibox"><img src="blender-svgrepo-com.svg" alt="Blender"></div><div class="ibox"><img src="python-svgrepo-com.svg" alt="Python"></div><div class="ibox"><img src="ai-svgrepo-com.svg" alt="AI"></div><div class="ibox"><img src="idea-svgrepo-com.svg" alt="Ideas"></div></div></div></div>`;
+T.about=T.home;
+T.artist=`<div class="page" style="align-items:flex-start;padding-top:2rem;padding-bottom:2rem;"><div class="card"><span class="card-line"></span><p class="label">3D ARTIST</p><div class="art-hdr"><div class="alogo2"><img src="ketcies.jpeg" alt="Ketcies3D"></div><div><span class="title-solid">Ketcies</span><span class="title-outline" style="-webkit-text-stroke-color:#0db8e8;">3D</span></div></div><p class="para">Precision-focused 3D artist specialising in complex articulated joint models and high-detail client work. I thrive where geometry gets complicated — turning technical briefs into production-ready 3D assets.</p><div class="inner"><div class="co-hdr"><div class="co-icon"><img src="cube-svgrepo-com.svg" alt="3D Printwise"></div><div><strong style="font-size:.97rem;color:var(--dark);">3D Printwise</strong><br><span class="co-type">3D ARTIST — INTERN</span></div></div><p class="para" style="margin:.4rem 0 .9rem;">Working on complex models and precision engineering for clients across two branches — United Kingdom &amp; India. Specialising in articulated joints and technically demanding geometries.</p><div class="tags"><span class="tag"><img src="united-kingdom-uk-svgrepo-com.svg" alt="UK flag">UNITED KINGDOM</span><span class="tag"><img src="maps-and-flags-indian-svgrepo-com.svg" alt="India flag">INDIA</span><span class="tag">3D PRINTING</span><span class="tag">PRECISION WORK</span></div></div><p class="sec-lbl">COMPANY CONTACT</p><div class="inner"><div class="email-row"><img src="phone-svgrepo-com.svg" alt="email"><a href="mailto:TonyPile@3dprintwise.onmicrosoft.com">TonyPile@3dprintwise.onmicrosoft.com</a></div></div><div class="inner" style="margin-top:.6rem;"><div class="email-row"><img src="phone-svgrepo-com.svg" alt="email"><a href="mailto:indialayers3dp@gmail.com">indialayers3dp@gmail.com</a></div></div><p class="port-lbl">PORTFOLIO</p><div class="port-grid"><img src="prtfl1.png" alt="Portfolio 1"><img src="prtfl2.png" alt="Portfolio 2"><img src="prtfl3.png" alt="Portfolio 3"><img src="pyroflex.jpg" alt="Portfolio 4"></div></div></div>`;
+T.developer=`<div class="page" style="align-items:flex-start;padding-top:2rem;padding-bottom:2rem;"><div class="card"><span class="card-line"></span><p class="label">DEVELOPER</p><div><span class="title-solid">Coding </span><span class="title-outline">Skills</span></div><p class="para">I enjoy building data-driven tools and intelligent systems using Python. My workflow involves data analysis, visualization and machine learning with libraries like NumPy, Pandas and Matplotlib. I also build modern web interfaces using HTML, CSS and JavaScript.</p><div class="inner"><div class="sk-group"><h4><img src="python-svgrepo-com.svg" alt="">Python Ecosystem</h4><div class="sk-row"><span>Python</span><div class="bar-t"><div class="bar-f" style="width:88%"></div></div></div><div class="sk-row"><span>NumPy</span><div class="bar-t"><div class="bar-f" style="width:80%"></div></div></div><div class="sk-row"><span>Pandas</span><div class="bar-t"><div class="bar-f" style="width:75%"></div></div></div><div class="sk-row"><span>Matplotlib</span><div class="bar-t"><div class="bar-f" style="width:70%"></div></div></div><div class="sk-row"><span>Scikit-Learn</span><div class="bar-t"><div class="bar-f" style="width:55%"></div></div></div></div></div><div class="inner"><div class="sk-group"><h4><img src="ai-svgrepo-com.svg" alt="">AI / Machine Learning</h4><div class="sk-row"><span>Machine Learning</span><div class="bar-t"><div class="bar-f" style="width:58%"></div></div></div><div class="sk-row"><span>Artificial Intelligence</span><div class="bar-t"><div class="bar-f" style="width:48%"></div></div></div></div></div><div class="inner"><div class="sk-group"><h4><img src="web-development-svgrepo-com.svg" alt="">Web Development</h4><div class="sk-row"><span>HTML</span><div class="bar-t"><div class="bar-f" style="width:85%"></div></div></div><div class="sk-row"><span>CSS</span><div class="bar-t"><div class="bar-f" style="width:80%"></div></div></div><div class="sk-row"><span>JavaScript</span><div class="bar-t"><div class="bar-f" style="width:60%"></div></div></div></div></div></div></div>`;
+T.projects=`<div class="page"><div class="card"><span class="card-line"></span><p class="label">PROJECTS</p><h2 class="title-pf" style="margin-bottom:.6rem;">Projects</h2><p class="para">A selection of technical and creative projects combining software, data, and hardware systems.</p><div class="proj-grid"><div class="proj-card"><div class="proj-hdr"><img class="proj-icon" src="fish-svgrepo-com.svg" alt=""><strong style="font-size:1.05rem;color:var(--dark);">AI Aquatic Labs</strong></div><p class="proj-type">HACKATHON 2025</p><p class="proj-desc">AI Aquatic Labs was developed during Hackathon 2025 as a data exploration platform for oceanographic and fisheries datasets. The system enables AI-assisted analysis, visualization and comparison of marine biodiversity data to help researchers uncover patterns in ocean ecosystems.</p><div class="tags"><span class="tag">PYTHON</span><span class="tag">PANDAS</span><span class="tag">MATPLOTLIB</span><span class="tag">AI</span></div><a class="proj-link" href="https://parthdabhi1703.github.io/aquaticlabs/" target="_blank">View Project →</a></div><div class="proj-card"><div class="proj-hdr"><img class="proj-icon" src="suitcase-svgrepo-com.svg" alt=""><strong style="font-size:1.05rem;color:var(--dark);">Smart Luggage Backpack</strong></div><p class="proj-type">IOT PROJECT</p><p class="proj-desc">The Smart Luggage Backpack is an intelligent travel companion designed to improve convenience and security. The system integrates automatic following, GPS tracking, distance monitoring and real-time alerts when the bag is misplaced or moved unexpectedly.</p><div class="tags"><span class="tag">ARDUINO</span><span class="tag">ESP32</span><span class="tag">GPS</span><span class="tag">IOT</span></div><a class="proj-link" href="" target="_blank">View Project →</a></div></div></div></div>`;
+T.studies=`<div class="page"><div class="card"><span class="card-line"></span><p class="label">STUDIES</p><h2 class="title-pf" style="margin-bottom:1.5rem;">Studies</h2><div class="edu"><div class="edu-hdr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><h3>Higher Secondary Education</h3></div><p>Board : Gujarat Secondary &amp; Higher Secondary Education Board<br>Stream : Physics • Chemistry • Mathematics</p></div><div class="edu"><div class="edu-hdr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><h3>Bachelor of Engineering</h3></div><p>University : Gujarat Technological University<br>College : SAL Engineering &amp; Technical Institute<br>Branch : Information Technology<br>Current Semester : 6<br>Graduation Year : 2027</p></div></div></div>`;
+T.contact=`<div class="page"><div class="card"><span class="card-line"></span><div class="ct-top"><div><p class="label">CONTACT</p><h2 class="title-pf">Get In Touch</h2></div><div class="ct-icon">!</div></div><p class="para">If you would like to collaborate, discuss projects, or simply connect, feel free to reach out through the emails below.</p><div class="ct-cards"><div class="ct-card"><h4>Professional Contact</h4><a href="mailto:ketcies3d336@gmail.com">ketcies3d336@gmail.com</a></div><div class="ct-card"><h4>General / Coding Contact</h4><a href="mailto:aniket336parmar@gmail.com">aniket336parmar@gmail.com</a></div></div></div></div>`;
+T.hobbies=`<div class="placeholder">SIDE HOBBIES — Coming Soon</div>`;
+angular.module('portfolio',['ngRoute'])
+.config(function($routeProvider){$routeProvider.when('/',{template:T.home}).when('/artist',{template:T.artist}).when('/developer',{template:T.developer}).when('/projects',{template:T.projects}).when('/studies',{template:T.studies}).when('/hobbies',{template:T.hobbies}).when('/contact',{template:T.contact}).otherwise({redirectTo:'/'});})
+.controller('HomeCtrl',function($scope,$interval){var lines=['3D Artist crafting digital worlds','Python enthusiast building smart tools','Aspiring AI & Machine Learning engineer','Creative technologist exploring innovation'];var i=0;$scope.currentText=lines[0];$interval(function(){i=(i+1)%lines.length;var el=document.getElementById('glt');if(!el)return;el.classList.add('glitching');setTimeout(function(){$scope.$apply(function(){$scope.currentText=lines[i];});el.classList.remove('glitching');},500);},3000);})
+.run(function($rootScope,$location){$rootScope.$on('$routeChangeSuccess',function(){var p='#!/'+($location.path().slice(1)||'');document.querySelectorAll('nav a').forEach(function(a){a.classList.toggle('active',a.getAttribute('href')===p);});});});
+</script>
+</body>
+</html>
